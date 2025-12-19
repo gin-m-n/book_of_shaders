@@ -1,3 +1,5 @@
+// https://gist.github.com/showa-yojyo/9ca41224f478fa5ffd8374da57d30e89
+
 #ifdef GL_ES
 precision mediump float;
 #endif
@@ -32,10 +34,18 @@ void main() {
     float angle = atan(toCenter.y, toCenter.x);
     float radius = length(toCenter) * 2.0;
     
-    float hue = (angle / TWO_PI + 0.5);
+    float hue = angle / TWO_PI + 0.5;
     
-    // Map the angle (-PI to PI) to the Hue (from 0 to 1)
-    // and the Saturation to the radius
+    float d = 0.1;
+    float x1 = d;
+    float x2 = 1.0 - d;
+    float y1 = (1.0 - d) * 0.5;
+    float y2 = (1.0 + d) * 0.5;
+    
+    hue = pulse(0.0, x1, hue) * mix(0.0, y1, hue / d)
+    + pulse(x1, x2, hue) * mix(y1, y2, (hue - x1) / (x2 - x1))
+    + pulse(x2, 1.0, hue) * mix(y2, 1.0, (hue - x2) / (1.0 - x2));
+    
     color = hsb2rgb(vec3(hue, radius, 1.0));
     
     gl_FragColor = vec4(color, 1.0);

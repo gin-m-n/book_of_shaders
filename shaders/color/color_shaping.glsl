@@ -19,10 +19,6 @@ vec3 hsb2rgb(in vec3 c) {
     return c.z * mix(vec3(1.0), rgb, c.y);
 }
 
-float pulse(float a, float b, float x) {
-    return step(a, x) - step(b, x);
-}
-
 void main() {
     vec2 st = gl_FragCoord.xy / u_resolution;
     vec3 color = vec3(0.0);
@@ -32,7 +28,7 @@ void main() {
     float angle = atan(toCenter.y, toCenter.x);
     float radius = length(toCenter) * 2.0;
     
-    float hue = (angle / TWO_PI + 0.5);
+    float hue = sin((angle / TWO_PI + 0.5) * TWO_PI);
     
     // Map the angle (-PI to PI) to the Hue (from 0 to 1)
     // and the Saturation to the radius
